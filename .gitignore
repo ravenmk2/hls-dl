@@ -1,0 +1,17 @@
+# Binary
+hls-dl.exe
+hls-dl
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Agents
+.claude
+.opencode
