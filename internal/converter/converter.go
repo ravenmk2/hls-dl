@@ -9,12 +9,11 @@ import (
 	"strings"
 )
 
-func Convert(ctx context.Context, segmentFiles []string, outputPath string) error {
-	listPath := outputPath + ".concat.txt"
+func Convert(ctx context.Context, segmentFiles []string, outputPath, tempDir string) error {
+	listPath := filepath.Join(tempDir, "concat.txt")
 	if err := writeConcatFile(listPath, segmentFiles); err != nil {
 		return fmt.Errorf("write concat file: %w", err)
 	}
-	defer os.Remove(listPath)
 
 	absList, err := filepath.Abs(listPath)
 	if err != nil {

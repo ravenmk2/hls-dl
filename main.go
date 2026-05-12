@@ -164,7 +164,7 @@ func run(c *cli.Context) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "\nConverting to MP4...\n")
-		if err := converter.Convert(ctx, segmentFiles, outputPath); err != nil {
+		if err := converter.Convert(ctx, segmentFiles, outputPath, tempDir); err != nil {
 			if ctx.Err() != nil {
 				return nil
 			}
