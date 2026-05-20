@@ -80,5 +80,11 @@ func (f *Fetcher) doFetch(urlStr string) ([]byte, error) {
 		return nil, fmt.Errorf("read body %s: %w", urlStr, err)
 	}
 
+	if cl := resp.ContentLength; cl > 0 {
+		if int64(len(data)) != cl {
+			return nil, fmt.Errorf("fetch %s: expected %d bytes, got %d", urlStr, cl, len(data))
+		}
+	}
+
 	return data, nil
 }
