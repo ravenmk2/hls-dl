@@ -62,6 +62,11 @@ func main() {
 			Value:   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36",
 			Usage:   "User-Agent header",
 		},
+		&cli.DurationFlag{
+			Name:  "ts-timeout",
+			Value: 60 * time.Second,
+			Usage: "Per-segment HTTP request timeout",
+		},
 		},
 		Action: run,
 	}
@@ -122,7 +127,7 @@ func run(c *cli.Context) error {
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer cancel()
 
-	fetcher := hls.NewFetcher(headers, c.String("user-agent"))
+	fetcher := hls.NewFetcher(headers, c.String("user-agent"), c.Duration("ts-timeout"))
 	concurrency := c.Int("concurrency")
 
 	attempt := 0
