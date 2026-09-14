@@ -19,7 +19,6 @@ jobs:
           - { os: windows-latest, goarch: amd64 }
           - { os: windows-latest, goarch: '386' }
           - { os: windows-11-arm, goarch: arm64 }
-          - { os: macos-13, goarch: amd64 }
           - { os: macos-latest, goarch: arm64 }
     env:
       GOARCH: ${{ matrix.goarch }}
