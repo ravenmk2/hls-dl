@@ -1,0 +1,83 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*.*.*']
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { goos: linux, goarch: amd64 }
+          - { goos: linux, goarch: arm64 }
+          - { goos: linux, goarch: '386' }
+          - { goos: windows, goarch: amd64 }
+          - { goos: windows, goarch: arm64 }
+          - { goos: windows, goarch: '386' }
+          - { goos: darwin, goarch: amd64 }
+          - { goos: darwin, goarch: arm64 }
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: Build
+        env:
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+          CGO_ENABLED: '0'
+          VERSION: ${{ github.ref_name }}
+        run: |
+          ext=""
+          [ "$GOOS" = "windows" ] && ext=".exe"
+          go build -trimpath -ldflags "-s -w -X main.Version=$VERSION" -o "dist/hls-dl${ext}" .
+
+      - name: Package
+        env:
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+          VERSION: ${{ github.ref_name }}
+        run: |
+          name="hls-dl_${VERSION}_${GOOS}_${GOARCH}"
+          mkdir -p artifacts
+          if [ "$GOOS" = "windows" ]; then
+            zip -j "artifacts/${name}.zip" dist/hls-dl.exe
+          else
+            tar -czf "artifacts/${name}.tar.gz" -C dist hls-dl
+          fi
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.goos }}-${{ matrix.goarch }}
+          path: artifacts/
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: '*'
+          merge-multiple: true
+          path: dist
+
+      - name: Generate checksums
+        working-directory: dist
+        run: sha256sum hls-dl_* > checksums.txt
+
+      - name: Publish Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
+          generate_release_notes: true
+          append_body: |
+            ---
+            **Note**: `hls-dl` requires [FFmpeg](https://ffmpeg.org/download.html) available in `PATH` for MP4 conversion.

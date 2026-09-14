@@ -14,7 +14,13 @@ main.go                     # CLI entry (urfave/cli)
 internal/hls/               # M3U8 parsing, HTTP fetching
 internal/downloader/        # Concurrent segment download + AES-128-CBC decrypt
 internal/converter/         # FFmpeg concat -> MP4
+.github/workflows/          # CI: test on push/PR, release on v*.*.* tags
 ```
+
+## CI
+
+- `test.yml`: vet + build + test on push/PR to master, develop, main
+- `release.yml`: tag `v*.*.*` builds 8 targets (linux/windows/darwin x amd64/arm64, plus linux/windows 386) and publishes archives + checksums to GitHub Releases; version injected via `-X main.Version=<tag>`
 
 No tests yet.
 
