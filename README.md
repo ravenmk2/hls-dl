@@ -1,5 +1,7 @@
 # hls-dl
 
+[![Test](https://github.com/ravenmk2/hls-dl/actions/workflows/test.yml/badge.svg)](https://github.com/ravenmk2/hls-dl/actions/workflows/test.yml)
+[![Release](https://github.com/ravenmk2/hls-dl/actions/workflows/release.yml/badge.svg)](https://github.com/ravenmk2/hls-dl/actions/workflows/release.yml)
 [![Go](https://img.shields.io/badge/Go-1.21+-00ADD8?logo=go)](https://go.dev/)
 
 A fast HLS (m3u8) stream downloader that fetches all segments locally, then converts them to MP4 with FFmpeg.
@@ -21,7 +23,7 @@ A fast HLS (m3u8) stream downloader that fetches all segments locally, then conv
 ## Install
 
 ```bash
-git clone https://github.com/ravenmk3/hls-dl.git
+git clone https://github.com/ravenmk2/hls-dl.git
 cd hls-dl
 go build -o hls-dl .
 ```
