@@ -19,10 +19,8 @@ internal/converter/         # FFmpeg concat -> MP4
 
 ## CI
 
-- `test.yml`: vet + build + test on push/PR to master, develop, main
+- `test.yml`: vet + build + test on push/PR to master, develop, main; matrix runs all 8 release targets natively (386 via GOARCH on amd64 runners, arm64 on ARM runners)
 - `release.yml`: tag `v*.*.*` builds 8 targets (linux/windows/darwin x amd64/arm64, plus linux/windows 386) and publishes archives + checksums to GitHub Releases; version injected via `-X main.Version=<tag>`
-
-No tests yet.
 
 ## Conventions
 

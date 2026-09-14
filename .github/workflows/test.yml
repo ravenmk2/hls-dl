@@ -8,7 +8,21 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { os: ubuntu-latest, goarch: amd64 }
+          - { os: ubuntu-latest, goarch: '386' }
+          - { os: ubuntu-24.04-arm, goarch: arm64 }
+          - { os: windows-latest, goarch: amd64 }
+          - { os: windows-latest, goarch: '386' }
+          - { os: windows-11-arm, goarch: arm64 }
+          - { os: macos-13, goarch: amd64 }
+          - { os: macos-latest, goarch: arm64 }
+    env:
+      GOARCH: ${{ matrix.goarch }}
     steps:
       - uses: actions/checkout@v4
 
